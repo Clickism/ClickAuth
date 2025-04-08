@@ -13,7 +13,6 @@ import me.clickism.clickauth.authentication.PasswordManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.util.UUID;
 import java.util.logging.Logger;
 
 public final class ClickAuth extends JavaPlugin {
@@ -37,13 +36,5 @@ public final class ClickAuth extends JavaPlugin {
             return;
         }
         PasswordManager passwordManager = new PasswordManager(passwordRepository, new BCryptPasswordHasher());
-        UUID[] uuids = new UUID[10];
-        for (int i = 0; i < 10; i++) {
-            uuids[i] = UUID.randomUUID();
-            passwordManager.setPassword(uuids[i], "password" + i);
-        }
-        for (int i = 0; i < 10; i++) {
-            LOGGER.info("Result: " + passwordManager.checkPassword(uuids[i], "password" + i));
-        }
     }
 }
