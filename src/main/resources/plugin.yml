@@ -1,0 +1,6 @@
+name: ClickAuth
+version: '${version}'
+main: me.clickism.clickauth.ClickAuth
+api-version: '1.20'
+authors: [ Clickism ]
+description: Simple player authentication plugin
