@@ -6,10 +6,13 @@
 
 package me.clickism.clickauth;
 
-import me.clickism.clickauth.data.Database;
-import me.clickism.clickauth.data.PasswordRepository;
+import me.clickism.clickauth.authentication.AuthManager;
 import me.clickism.clickauth.authentication.BCryptPasswordHasher;
 import me.clickism.clickauth.authentication.PasswordManager;
+import me.clickism.clickauth.data.Database;
+import me.clickism.clickauth.data.PasswordRepository;
+import me.clickism.clickauth.listener.ChatInputListener;
+import me.clickism.clickauth.listener.JoinListener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -36,5 +39,10 @@ public final class ClickAuth extends JavaPlugin {
             return;
         }
         PasswordManager passwordManager = new PasswordManager(passwordRepository, new BCryptPasswordHasher());
+        AuthManager authManager = new AuthManager();
+        ChatInputListener chatInputListener = new ChatInputListener(this)
+                .registerListener(this);
+        new JoinListener(passwordManager, authManager, chatInputListener)
+                .registerListener(this);
     }
 }
