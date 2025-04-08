@@ -6,8 +6,8 @@
 
 package me.clickism.clickauth.authentication;
 
-public interface PasswordHasher {
-    String hash(String password);
+public interface Hasher {
+    String hash(String string);
 
-    boolean check(String password, String hash);
+    boolean check(String string, String hash);
 }
