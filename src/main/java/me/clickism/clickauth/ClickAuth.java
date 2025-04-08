@@ -7,7 +7,8 @@
 package me.clickism.clickauth;
 
 import me.clickism.clickauth.authentication.AuthManager;
-import me.clickism.clickauth.authentication.BCryptPasswordHasher;
+import me.clickism.clickauth.authentication.BCryptHasher;
+import me.clickism.clickauth.authentication.IpHasher;
 import me.clickism.clickauth.authentication.PasswordManager;
 import me.clickism.clickauth.data.Database;
 import me.clickism.clickauth.data.PasswordRepository;
@@ -38,7 +39,8 @@ public final class ClickAuth extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
-        PasswordManager passwordManager = new PasswordManager(passwordRepository, new BCryptPasswordHasher());
+        PasswordManager passwordManager = new PasswordManager(passwordRepository,
+                new BCryptHasher(), new IpHasher());
         AuthManager authManager = new AuthManager();
         ChatInputListener chatInputListener = new ChatInputListener(this)
                 .registerListener(this);
