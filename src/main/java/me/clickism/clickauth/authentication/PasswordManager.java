@@ -12,15 +12,24 @@ import java.util.UUID;
 
 public class PasswordManager {
     private final PasswordRepository passwordRepository;
-    private final PasswordHasher passwordHasher;
+    private final Hasher passwordHasher;
+    private final Hasher ipHasher;
 
-    public PasswordManager(PasswordRepository passwordRepository, PasswordHasher passwordHasher) {
+    public PasswordManager(PasswordRepository passwordRepository,
+                           Hasher passwordHasher,
+                           Hasher ipHasher) {
         this.passwordRepository = passwordRepository;
         this.passwordHasher = passwordHasher;
+        this.ipHasher = ipHasher;
     }
 
     public boolean checkLastSession(UUID uuid, String ip) {
+
         return false; // TODO: Implement
+    }
+
+    public void setLastSession(UUID uuid, String ip) {
+        // TODO: Implement
     }
 
     public boolean checkPassword(UUID uuid, String password) {
