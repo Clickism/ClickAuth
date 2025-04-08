@@ -7,7 +7,6 @@
 package me.clickism.clickauth.authentication;
 
 import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.Player;
 
 import java.util.*;
 
