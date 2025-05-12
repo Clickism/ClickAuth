@@ -39,8 +39,8 @@ public class ClickAuthConfig {
             CONFIG.optionOf("remember_sessions", true)
                     .description("""
                             Whether to keep track of the last session of a player.
-                            The player will be automatically logged in if they have
-                            the same IP address from their last successful login.
+                            Player will be automatically logged in if they have the
+                            same IP address from their last successful login.
                             """)
                     .appendDefaultValue();
 }
