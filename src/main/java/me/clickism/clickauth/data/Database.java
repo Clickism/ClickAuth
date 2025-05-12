@@ -18,7 +18,6 @@ import java.util.Optional;
 public class Database {
     private static final String CONNECTION_PREFIX = "jdbc:sqlite:";
 
-    // TODO: Close connection on shutdown
     private final Connection connection;
 
     protected Database(Connection connection) {
