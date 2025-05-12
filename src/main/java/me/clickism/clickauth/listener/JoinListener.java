@@ -14,6 +14,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.jetbrains.annotations.Nullable;
 
 import java.net.InetSocketAddress;
+import java.util.Optional;
 import java.util.UUID;
 
 public class JoinListener implements RegistrableListener {
@@ -53,8 +54,8 @@ public class JoinListener implements RegistrableListener {
                 password -> {
                     if (passwordManager.checkPassword(player.getUniqueId(), password)) {
                         // Log in player
+                        authenticateAndSaveSession(player);
                         player.sendMessage("Welcome back.");
-                        authManager.authenticate(player);
                     } else {
                         player.sendMessage("Incorrect password, please try again.");
                         authManager.incrementFailedAttempts(player);
@@ -92,19 +93,28 @@ public class JoinListener implements RegistrableListener {
                         askRegister(player);
                         return;
                     }
-                    authManager.authenticate(player);
+                    authenticateAndSaveSession(player);
                     player.sendMessage("Password set. You can now log in.");
                 },
                 () -> player.kickPlayer("Registration timed out."),
                 LOGIN_TIMEOUT);
     }
 
+    private void authenticateAndSaveSession(Player player) {
+        authManager.authenticate(player);
+        String ip = getIpAddress(player).orElse(null);
+        if (ip == null) return;
+        passwordManager.setLastSession(player.getUniqueId(), ip);
+    }
+
     private boolean checkLastSession(Player player) {
-        InetSocketAddress socketAddress = player.getAddress();
-        if (socketAddress != null) {
-            String ip = socketAddress.getHostString();
-            return passwordManager.checkLastSession(player.getUniqueId(), ip);
-        }
-        return false;
+        return getIpAddress(player)
+                .map(ip -> passwordManager.checkLastSession(player.getUniqueId(), ip))
+                .orElse(false);
+    }
+
+    private Optional<String> getIpAddress(Player player) {
+        return Optional.ofNullable(player.getAddress())
+                .map(InetSocketAddress::getHostString);
     }
 }

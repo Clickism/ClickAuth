@@ -24,12 +24,13 @@ public class PasswordManager {
     }
 
     public boolean checkLastSession(UUID uuid, String ip) {
-
-        return false; // TODO: Implement
+        return passwordRepository.getLastIp(uuid)
+                .map(lastIp -> ipHasher.check(ip, lastIp))
+                .orElse(false);
     }
 
-    public void setLastSession(UUID uuid, String ip) {
-        // TODO: Implement
+    public boolean setLastSession(UUID uuid, String ip) {
+        return passwordRepository.setLastIp(uuid, ipHasher.hash(ip));
     }
 
     public boolean checkPassword(UUID uuid, String password) {

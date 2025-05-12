@@ -35,7 +35,7 @@ public class PasswordRepository {
 
     public Optional<String> getPasswordHash(UUID uuid) {
         @Language("SQL")
-        String sql = "SELECT DISTINCT password_hash FROM players WHERE uuid = ?";
+        String sql = "SELECT password_hash FROM players WHERE uuid = ?";
         return database.query(sql, resultSet -> {
             try {
                 return resultSet.getString("password_hash");
@@ -52,12 +52,32 @@ public class PasswordRepository {
         return database.execute(sql, uuid.toString(), passwordHash);
     }
 
+    public Optional<String> getLastIp(UUID uuid) {
+        @Language("SQL")
+        String sql = "SELECT last_ip FROM players WHERE uuid = ?";
+        return database.query(sql, resultSet -> {
+            try {
+                return resultSet.getString("last_ip");
+            } catch (SQLException e) {
+                ClickAuth.LOGGER.severe("Failed to get last IP: " + e.getMessage());
+                return null;
+            }
+        }, uuid.toString());
+    }
+
+    public boolean setLastIp(UUID uuid, String lastIp) {
+        @Language("SQL")
+        String sql = "UPDATE players SET last_ip = ? WHERE uuid = ?";
+        return database.execute(sql, lastIp, uuid.toString());
+    }
+
     public boolean createTable() {
         @Language("SQL")
         String sql = """
                 CREATE TABLE IF NOT EXISTS players (
                     uuid TEXT PRIMARY KEY,
-                    password_hash TEXT NOT NULL
+                    password_hash TEXT NOT NULL,
+                    last_ip TEXT,
                 )
                 """;
         return database.execute(sql);
