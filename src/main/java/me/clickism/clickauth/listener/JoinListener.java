@@ -17,10 +17,9 @@ import java.net.InetSocketAddress;
 import java.util.Optional;
 import java.util.UUID;
 
-public class JoinListener implements RegistrableListener {
+import static me.clickism.clickauth.ClickAuthConfig.*;
 
-    private static final long LOGIN_TIMEOUT = 20 * 20;
-    private static final long MAX_LOGIN_ATTEMPTS = 3;
+public class JoinListener implements RegistrableListener {
 
     private final PasswordManager passwordManager;
     private final AuthManager authManager;
@@ -59,7 +58,7 @@ public class JoinListener implements RegistrableListener {
                     } else {
                         player.sendMessage("Incorrect password, please try again.");
                         authManager.incrementFailedAttempts(player);
-                        if (authManager.getFailedAttempts(player) >= MAX_LOGIN_ATTEMPTS) {
+                        if (authManager.getFailedAttempts(player) >= CONFIG.get(MAX_LOGIN_ATTEMPTS)) {
                             player.kickPlayer("Too many failed attempts.");
                             return;
                         }
@@ -67,7 +66,7 @@ public class JoinListener implements RegistrableListener {
                     }
                 },
                 () -> player.kickPlayer("Login timed out."),
-                LOGIN_TIMEOUT);
+                CONFIG.get(LOGIN_TIMEOUT));
     }
 
     private void askRegister(Player player) {
@@ -97,17 +96,19 @@ public class JoinListener implements RegistrableListener {
                     player.sendMessage("Password set. You can now log in.");
                 },
                 () -> player.kickPlayer("Registration timed out."),
-                LOGIN_TIMEOUT);
+                CONFIG.get(LOGIN_TIMEOUT));
     }
 
     private void authenticateAndSaveSession(Player player) {
         authManager.authenticate(player);
+        if (!CONFIG.get(REMEMBER_SESSIONS)) return;
         String ip = getIpAddress(player).orElse(null);
         if (ip == null) return;
         passwordManager.setLastSession(player.getUniqueId(), ip);
     }
 
     private boolean checkLastSession(Player player) {
+        if (!CONFIG.get(REMEMBER_SESSIONS)) return false;
         return getIpAddress(player)
                 .map(ip -> passwordManager.checkLastSession(player.getUniqueId(), ip))
                 .orElse(false);
