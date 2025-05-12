@@ -23,7 +23,7 @@ public class PasswordRepository {
     public static Optional<PasswordRepository> create(Database database) {
         PasswordRepository repository = new PasswordRepository(database);
         if (!repository.createTable()) {
-            ClickAuth.LOGGER.severe("Failed to create Players table");
+            ClickAuth.LOGGER.severe("Failed to create players table");
             return Optional.empty();
         }
         return Optional.of(repository);
@@ -77,7 +77,7 @@ public class PasswordRepository {
                 CREATE TABLE IF NOT EXISTS players (
                     uuid TEXT PRIMARY KEY,
                     password_hash TEXT NOT NULL,
-                    last_ip TEXT,
+                    last_ip TEXT
                 )
                 """;
         return database.execute(sql);
