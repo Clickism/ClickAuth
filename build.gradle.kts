@@ -9,6 +9,7 @@ val pluginVersion = property("plugin_version").toString()
 
 repositories {
     mavenCentral()
+    mavenLocal()
     maven {
         name = "spigotmc-repo"
         url = uri("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
@@ -24,10 +25,11 @@ dependencies {
     compileOnly("org.jetbrains:annotations:26.0.2")
     implementation("org.xerial:sqlite-jdbc:3.49.1.0")
     implementation("at.favre.lib:bcrypt:0.10.2")
+    implementation("me.clickism:configured:0.1")
 }
 
 tasks.runServer {
-    minecraftVersion("1.20.1")
+    minecraftVersion("1.21.5")
 }
 
 tasks.build {

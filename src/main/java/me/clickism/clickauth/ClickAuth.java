@@ -20,6 +20,8 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.util.logging.Logger;
 
+import static me.clickism.clickauth.ClickAuthConfig.*;
+
 public final class ClickAuth extends JavaPlugin {
 
     public static Logger LOGGER;
@@ -33,6 +35,7 @@ public final class ClickAuth extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        CONFIG.load();
         File databaseFile = new File(getDataFolder(), "database.db");
         this.database = Database.connect(databaseFile).orElse(null);
         PasswordRepository passwordRepository = null;
