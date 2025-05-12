@@ -13,6 +13,7 @@ import me.clickism.clickauth.authentication.PasswordManager;
 import me.clickism.clickauth.data.Database;
 import me.clickism.clickauth.data.PasswordRepository;
 import me.clickism.clickauth.listener.ChatInputListener;
+import me.clickism.clickauth.listener.GriefListener;
 import me.clickism.clickauth.listener.JoinListener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Nullable;
@@ -55,6 +56,8 @@ public final class ClickAuth extends JavaPlugin {
         ChatInputListener chatInputListener = new ChatInputListener(this)
                 .registerListener(this);
         new JoinListener(passwordManager, authManager, chatInputListener)
+                .registerListener(this);
+        new GriefListener(authManager)
                 .registerListener(this);
     }
 
