@@ -42,8 +42,9 @@ public class ChatInputListener implements RegistrableListener {
         Consumer<String> callback = callbackMap.get(player);
         if (callback == null) return;
         callbackMap.remove(player);
+        String message = event.getMessage();
         Bukkit.getScheduler().runTask(plugin, () -> {
-            callback.accept(event.getMessage());
+            callback.accept(message);
         });
         event.setMessage("");
         event.setCancelled(true);
