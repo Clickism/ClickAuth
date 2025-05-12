@@ -18,6 +18,7 @@ import java.util.Optional;
 public class Database {
     private static final String CONNECTION_PREFIX = "jdbc:sqlite:";
 
+    // TODO: Close connection on shutdown
     private final Connection connection;
 
     protected Database(Connection connection) {
@@ -37,6 +38,14 @@ public class Database {
         } catch (SQLException e) {
             ClickAuth.LOGGER.severe("Can't connect to database: " + e.getMessage());
             return Optional.empty();
+        }
+    }
+
+    public void disconnect() {
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            ClickAuth.LOGGER.severe("Failed to close database connection: " + e.getMessage());
         }
     }
 

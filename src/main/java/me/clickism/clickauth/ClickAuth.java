@@ -15,6 +15,7 @@ import me.clickism.clickauth.data.PasswordRepository;
 import me.clickism.clickauth.listener.ChatInputListener;
 import me.clickism.clickauth.listener.JoinListener;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.logging.Logger;
@@ -22,6 +23,8 @@ import java.util.logging.Logger;
 public final class ClickAuth extends JavaPlugin {
 
     public static Logger LOGGER;
+
+    private @Nullable Database database;
 
     @Override
     public void onLoad() {
@@ -31,9 +34,11 @@ public final class ClickAuth extends JavaPlugin {
     @Override
     public void onEnable() {
         File databaseFile = new File(getDataFolder(), "database.db");
-        PasswordRepository passwordRepository = Database.connect(databaseFile)
-                .flatMap(PasswordRepository::create)
-                .orElse(null);
+        this.database = Database.connect(databaseFile).orElse(null);
+        PasswordRepository passwordRepository = null;
+        if (database != null) {
+            passwordRepository = PasswordRepository.create(database).orElse(null);
+        }
         if (passwordRepository == null) {
             LOGGER.severe("Failed to initialize database.");
             getServer().getPluginManager().disablePlugin(this);
@@ -46,5 +51,12 @@ public final class ClickAuth extends JavaPlugin {
                 .registerListener(this);
         new JoinListener(passwordManager, authManager, chatInputListener)
                 .registerListener(this);
+    }
+
+    @Override
+    public void onDisable() {
+        if (database != null) {
+            database.disconnect();
+        }
     }
 }
