@@ -1,5 +1,5 @@
 ## ClickAuth 🔑
-ClickAuth is a work-in-progress authentication plugin for Minecraft that JUST works.
+ClickAuth is a work-in-progress offline authentication plugin for Minecraft that JUST works.
 
 ### Features
 - **Effortless.** Ready to use out of the box.
