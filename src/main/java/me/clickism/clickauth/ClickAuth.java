@@ -24,12 +24,14 @@ import static me.clickism.clickauth.ClickAuthConfig.*;
 
 public final class ClickAuth extends JavaPlugin {
 
+    public static ClickAuth INSTANCE;
     public static Logger LOGGER;
 
     private @Nullable Database database;
 
     @Override
     public void onLoad() {
+        INSTANCE = this;
         LOGGER = getLogger();
     }
 
