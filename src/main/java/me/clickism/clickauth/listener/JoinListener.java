@@ -87,7 +87,11 @@ public class JoinListener implements RegistrableListener {
                         askRegister(player);
                         return;
                     }
-                    passwordManager.setPassword(player.getUniqueId(), password);
+                    if (!passwordManager.setPassword(player.getUniqueId(), password)) {
+                        player.sendMessage("Failed to set password. Please try again.");
+                        askRegister(player);
+                        return;
+                    }
                     authManager.authenticate(player);
                     player.sendMessage("Password set. You can now log in.");
                 },

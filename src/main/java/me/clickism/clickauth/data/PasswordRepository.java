@@ -48,16 +48,16 @@ public class PasswordRepository {
 
     public boolean setPasswordHash(UUID uuid, String passwordHash) {
         @Language("SQL")
-        String sql = "INSERT OR REPLACE INTO Players (Uuid, PasswordHash) VALUES (?, ?)";
+        String sql = "INSERT OR REPLACE INTO players (uuid, password_hash) VALUES (?, ?)";
         return database.execute(sql, uuid.toString(), passwordHash);
     }
 
     public boolean createTable() {
         @Language("SQL")
         String sql = """
-                CREATE TABLE IF NOT EXISTS Players (
-                    Uuid TEXT PRIMARY KEY,
-                    PasswordHash TEXT NOT NULL
+                CREATE TABLE IF NOT EXISTS players (
+                    uuid TEXT PRIMARY KEY,
+                    password_hash TEXT NOT NULL
                 )
                 """;
         return database.execute(sql);

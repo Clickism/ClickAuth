@@ -38,8 +38,8 @@ public class PasswordManager {
                 .orElse(false);
     }
 
-    public void setPassword(UUID uuid, String password) {
-        passwordRepository.setPasswordHash(uuid, passwordHasher.hash(password));
+    public boolean setPassword(UUID uuid, String password) {
+        return passwordRepository.setPasswordHash(uuid, passwordHasher.hash(password));
     }
 
     public boolean hasPassword(UUID uuid) {
