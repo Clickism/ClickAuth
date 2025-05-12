@@ -41,19 +41,19 @@ public class Database {
         }
     }
 
+    private static boolean createParentDirectoriesIfAbsent(File file) {
+        if (file.exists()) return true;
+        File parentFile = file.getParentFile();
+        if (parentFile.exists()) return true;
+        return parentFile.mkdirs();
+    }
+
     public void disconnect() {
         try {
             connection.close();
         } catch (SQLException e) {
             ClickAuth.LOGGER.severe("Failed to close database connection: " + e.getMessage());
         }
-    }
-
-    private static boolean createParentDirectoriesIfAbsent(File file) {
-        if (file.exists()) return true;
-        File parentFile = file.getParentFile();
-        if (parentFile.exists()) return true;
-        return parentFile.mkdirs();
     }
 
     public boolean execute(String sql) {
