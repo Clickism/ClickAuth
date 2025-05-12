@@ -35,10 +35,10 @@ public class PasswordRepository {
 
     public Optional<String> getPasswordHash(UUID uuid) {
         @Language("SQL")
-        String sql = "SELECT PasswordHash FROM Players WHERE Uuid = ?";
+        String sql = "SELECT DISTINCT password_hash FROM players WHERE uuid = ?";
         return database.query(sql, resultSet -> {
             try {
-                return resultSet.getString("PasswordHash");
+                return resultSet.getString("password_hash");
             } catch (SQLException e) {
                 ClickAuth.LOGGER.severe("Failed to get password hash: " + e.getMessage());
                 return null;
