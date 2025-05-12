@@ -6,8 +6,10 @@
 
 package me.clickism.clickauth.listener;
 
+import me.clickism.clickauth.ClickAuth;
 import me.clickism.clickauth.authentication.AuthManager;
 import me.clickism.clickauth.authentication.PasswordManager;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -38,6 +40,8 @@ public class JoinListener implements RegistrableListener {
         Player player = event.getPlayer();
         UUID playerUuid = player.getUniqueId();
         if (checkLastSession(player)) {
+            authManager.authenticate(player);
+            sendScheduledMessage(player, "Welcome back.");
             return;
         }
         if (passwordManager.hasPassword(playerUuid)) {
@@ -48,7 +52,7 @@ public class JoinListener implements RegistrableListener {
     }
 
     private void askLogin(Player player) {
-        player.sendMessage("Enter password:");
+        sendScheduledMessage(player, "Enter password:");
         chatInputListener.addChatCallback(player,
                 password -> {
                     if (passwordManager.checkPassword(player.getUniqueId(), password)) {
@@ -117,5 +121,13 @@ public class JoinListener implements RegistrableListener {
     private Optional<String> getIpAddress(Player player) {
         return Optional.ofNullable(player.getAddress())
                 .map(InetSocketAddress::getHostString);
+    }
+
+    private void sendScheduledMessage(Player player, String message) {
+        Bukkit.getScheduler().runTask(ClickAuth.INSTANCE, () -> {
+            if (player.isOnline()) {
+                player.sendMessage(message);
+            }
+        });
     }
 }
