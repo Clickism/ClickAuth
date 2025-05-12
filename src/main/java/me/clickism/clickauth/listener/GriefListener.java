@@ -35,6 +35,7 @@ public class GriefListener implements RegistrableListener {
         Location to = event.getTo();
         if (to == null) return;
         Location from = event.getFrom();
+        if (from.toVector().equals(to.toVector())) return;
         if (to.getY() < from.getY()) {
             // Allow falling
             return;
