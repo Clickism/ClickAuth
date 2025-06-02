@@ -10,6 +10,7 @@ import de.clickism.clickauth.ClickAuth;
 import de.clickism.configured.localization.Localization;
 import de.clickism.configured.localization.LocalizationKey;
 import de.clickism.configured.localization.Parameters;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 public enum Messages implements LocalizationKey {
@@ -52,6 +53,12 @@ public enum Messages implements LocalizationKey {
         @Override
         public void playSound(Player player) {
             MessageType.CONFIRM.playSound(player);
+        }
+    };
+    public static final MessageType AUTH_PORTAL = new MessageType("&6[🔑] &a", "&8< &b%s &8>") {
+        @Override
+        public void playSound(Player player) {
+            player.playSound(player, Sound.BLOCK_PORTAL_TRAVEL, .2f, 1f);
         }
     };
 

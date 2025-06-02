@@ -6,9 +6,7 @@
 
 package de.clickism.clickauth.authentication;
 
-import de.clickism.clickauth.ClickAuth;
 import de.clickism.clickauth.listener.ChatInputListener;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,7 +20,7 @@ import static de.clickism.clickauth.message.Messages.*;
 
 public class LoginHandler {
 
-    private static final Pattern PASSWORD_PATTERN = Pattern.compile("[A-Za-z0-9#?!@$%^&*\\-]{8,}");
+    private static Pattern passwordPattern = null;
 
     private final PasswordManager passwordManager;
     private final AuthManager authManager;
@@ -34,10 +32,14 @@ public class LoginHandler {
         this.chatInputListener = chatInputListener;
     }
 
+    public static void setPasswordPattern(Pattern passwordPattern) {
+        LoginHandler.passwordPattern = passwordPattern;
+    }
+
     public void handleLogin(Player player) {
         if (checkLastSession(player)) {
             authManager.authenticate(player.getUniqueId());
-            AUTH_SUCCESS.send(player, localize(WELCOME_BACK, player.getName()));
+            AUTH_PORTAL.send(player, localize(WELCOME_BACK, player.getName()));
             return;
         }
         if (passwordManager.hasPassword(player.getUniqueId())) {
@@ -55,7 +57,7 @@ public class LoginHandler {
                     if (passwordManager.checkPassword(uuid, password)) {
                         // Log in player
                         authenticateAndSaveSession(player);
-                        AUTH_SUCCESS.send(player, localize(WELCOME_BACK, player.getName()));
+                        AUTH_PORTAL.send(player, localize(WELCOME_BACK, player.getName()));
                     } else {
                         AUTH_FAIL.send(player, localize(INCORRECT_PASSWORD));
                         authManager.incrementFailedAttempts(uuid);
@@ -127,6 +129,6 @@ public class LoginHandler {
     }
 
     private boolean isValidPassword(String password) {
-        return PASSWORD_PATTERN.matcher(password).matches();
+        return passwordPattern.matcher(password).matches();
     }
 }

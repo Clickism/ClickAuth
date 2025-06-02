@@ -6,9 +6,13 @@
 
 package de.clickism.clickauth;
 
+import de.clickism.clickauth.authentication.LoginHandler;
 import de.clickism.clickauth.message.Messages;
 import de.clickism.configured.Config;
 import de.clickism.configured.ConfigOption;
+
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 public class ClickAuthConfig {
     public static final Config CONFIG =
@@ -66,4 +70,20 @@ public class ClickAuthConfig {
                             If disabled, any character is allowed.
                             """)
                     .appendDefaultValue();
+
+    public static final ConfigOption<String> PASSWORD_REGEX =
+            CONFIG.optionOf("password_regex", "[A-Za-z0-9#?!@$%^&*\\-]{8,}")
+                    .description("""
+                            Regular expression used to validate passwords.
+                            Only used if 'validate_passwords' is enabled.
+                            The default regex allows:
+                            - Uppercase and lowercase letters
+                            - Numbers
+                            - Special characters: # ? ! @ $ % ^ & * -
+                            The default regex enforces:
+                            - Minimum length of 8 characters
+                            - No spaces
+                            """)
+                    .appendDefaultValue()
+                    .onLoad(regex -> LoginHandler.setPasswordPattern(Pattern.compile(regex)));
 }
