@@ -21,11 +21,11 @@ import static de.clickism.clickauth.message.Messages.*;
 
 public class LoginHandler {
 
+    private static final Pattern PASSWORD_PATTERN = Pattern.compile("[A-Za-z0-9#?!@$%^&*\\-]{8,}");
+
     private final PasswordManager passwordManager;
     private final AuthManager authManager;
     private final ChatInputListener chatInputListener;
-
-    private static final Pattern PASSWORD_PATTERN = Pattern.compile("[A-Za-z0-9#?!@$%^&*\\-]{8,}");
 
     public LoginHandler(PasswordManager passwordManager, AuthManager authManager, ChatInputListener chatInputListener) {
         this.passwordManager = passwordManager;

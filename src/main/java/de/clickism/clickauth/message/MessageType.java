@@ -41,25 +41,9 @@ public abstract class MessageType {
             player.playSound(player, Sound.BLOCK_AMETHYST_BLOCK_RESONATE, 1f, 1f);
         }
     };
-
-    /**
-     * An enum that represents where to send a message.
-     */
-    protected enum SendType {
-        /**
-         * Send the message to the chat.
-         */
-        CHAT,
-        /**
-         * Send the message to the action bar.
-         */
-        ACTION_BAR
-    }
-
     private final String prefix;
     private final String titleFormat;
     private final String subtitleFormat;
-
     /**
      * Create a new message type with the given prefix.
      *
@@ -81,6 +65,36 @@ public abstract class MessageType {
         this.prefix = colorize(prefix);
         this.titleFormat = colorize(titleFormat);
         this.subtitleFormat = colorize(subtitleFormat);
+    }
+
+    /**
+     * Create a silent message type with the given prefix and title format.
+     *
+     * @param prefix      the prefix of the message
+     * @param titleFormat the format of the title, subtitle and action bar message.
+     * @return a silent message type
+     */
+    public static MessageType silent(String prefix, String titleFormat) {
+        return silent(prefix, titleFormat, titleFormat);
+    }
+
+    /**
+     * Create a silent message type with the given prefix, title format and subtitle format.
+     *
+     * @param prefix         the prefix of the message
+     * @param titleFormat    the format of the title and action bar message.
+     * @param subtitleFormat the format of the subtitle message.
+     * @return a silent message type
+     */
+    public static MessageType silent(String prefix, String titleFormat, String subtitleFormat) {
+        return new MessageType(prefix, titleFormat, subtitleFormat) {
+            @Override
+            public void playSound(Player player) {}
+        };
+    }
+
+    private static String colorize(String text) {
+        return ChatColor.translateAlternateColorCodes('&', text);
     }
 
     /**
@@ -247,32 +261,16 @@ public abstract class MessageType {
     }
 
     /**
-     * Create a silent message type with the given prefix and title format.
-     *
-     * @param prefix      the prefix of the message
-     * @param titleFormat the format of the title, subtitle and action bar message.
-     * @return a silent message type
+     * An enum that represents where to send a message.
      */
-    public static MessageType silent(String prefix, String titleFormat) {
-        return silent(prefix, titleFormat, titleFormat);
-    }
-
-    /**
-     * Create a silent message type with the given prefix, title format and subtitle format.
-     *
-     * @param prefix         the prefix of the message
-     * @param titleFormat    the format of the title and action bar message.
-     * @param subtitleFormat the format of the subtitle message.
-     * @return a silent message type
-     */
-    public static MessageType silent(String prefix, String titleFormat, String subtitleFormat) {
-        return new MessageType(prefix, titleFormat, subtitleFormat) {
-            @Override
-            public void playSound(Player player) {}
-        };
-    }
-
-    private static String colorize(String text) {
-        return ChatColor.translateAlternateColorCodes('&', text);
+    protected enum SendType {
+        /**
+         * Send the message to the chat.
+         */
+        CHAT,
+        /**
+         * Send the message to the action bar.
+         */
+        ACTION_BAR
     }
 }
