@@ -4,11 +4,13 @@ plugins {
     id("xyz.jpenilla.run-paper") version "2.3.1"
 }
 
-group = "me.clickism"
+group = "de.clickism"
 val pluginVersion = property("plugin_version").toString()
+version = pluginVersion
 
 repositories {
     mavenCentral()
+    mavenLocal()
     maven {
         name = "spigotmc-repo"
         url = uri("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
@@ -24,10 +26,11 @@ dependencies {
     compileOnly("org.jetbrains:annotations:26.0.2")
     implementation("org.xerial:sqlite-jdbc:3.49.1.0")
     implementation("at.favre.lib:bcrypt:0.10.2")
-    implementation("de.clickism:configured-core:0.2")
-    implementation("de.clickism:configured-yaml:0.2")
-    implementation("de.clickism:configured-json:0.2")
-    implementation("de.clickism:configured-localization:0.2")
+    // Configuration & Localization
+    implementation("de.clickism:configured-core:0.2.2")
+    implementation("de.clickism:configured-yaml:0.2.2")
+    implementation("de.clickism:configured-json:0.2.2")
+    implementation("de.clickism:configured-localization:0.2.2")
 }
 
 tasks.runServer {
@@ -38,8 +41,13 @@ tasks.build {
     dependsOn(tasks.shadowJar)
 }
 
+tasks.jar {
+    enabled = false
+}
+
 tasks.shadowJar {
     archiveClassifier.set("")
+    mergeServiceFiles()
     isEnableRelocation = true
     relocationPrefix = "de.clickism.clickauth.shadow"
 }
