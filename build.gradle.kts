@@ -9,7 +9,6 @@ val pluginVersion = property("plugin_version").toString()
 
 repositories {
     mavenCentral()
-    mavenLocal()
     maven {
         name = "spigotmc-repo"
         url = uri("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
@@ -25,7 +24,10 @@ dependencies {
     compileOnly("org.jetbrains:annotations:26.0.2")
     implementation("org.xerial:sqlite-jdbc:3.49.1.0")
     implementation("at.favre.lib:bcrypt:0.10.2")
-    implementation("me.clickism:configured:0.1")
+    implementation("de.clickism:configured-core:0.2")
+    implementation("de.clickism:configured-yaml:0.2")
+    implementation("de.clickism:configured-json:0.2")
+    implementation("de.clickism:configured-localization:0.2")
 }
 
 tasks.runServer {
@@ -37,9 +39,9 @@ tasks.build {
 }
 
 tasks.shadowJar {
-    archiveClassifier.set("")
-    isEnableRelocation = true
-    relocationPrefix = "me.clickism.clickauth.shadow"
+//    archiveClassifier.set("")
+//    isEnableRelocation = true
+//    relocationPrefix = "me.clickism.clickauth.shadow"
 }
 
 val targetJavaVersion = 17

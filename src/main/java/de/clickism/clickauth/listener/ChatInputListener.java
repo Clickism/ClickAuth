@@ -4,7 +4,7 @@
  * See LICENSE.md for details.
  */
 
-package me.clickism.clickauth.listener;
+package de.clickism.clickauth.listener;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

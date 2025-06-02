@@ -1,0 +1,18 @@
+{
+  "enter_password": "Enter password:",
+  "welcome_back": "Welcome back, {player}.",
+  "incorrect_password": "Incorrect password. Please try again.",
+  "invalid_password": "Invalid password. Password must be at least 8 characters long and not contain spaces.",
+  "too_many_attempts": "Too many failed attempts.",
+  "login_timed_out": "Login timed out.",
+  "enter_new_password": "Enter new password:",
+  "confirm_password": "Confirm password:",
+  "password_mismatch": "Passwords do not match. Please try again.",
+  "failed_to_set_password": "Failed to set password. Please try again.",
+  "password_set_successfully": "Password set successfully. You are now logged in.",
+  "registration_timed_out": "Registration timed out.",
+  "no_permission": "You do not have permission to do this.",
+  "password_changed": "Your password has been changed successfully.",
+  "password_changed_other": "{player}'s password has been changed successfully.",
+  "must_be_logged_in": "You must be logged in to do that."
+}

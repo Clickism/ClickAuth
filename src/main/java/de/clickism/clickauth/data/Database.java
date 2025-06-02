@@ -4,9 +4,9 @@
  * See LICENSE.md for details.
  */
 
-package me.clickism.clickauth.data;
+package de.clickism.clickauth.data;
 
-import me.clickism.clickauth.ClickAuth;
+import de.clickism.clickauth.ClickAuth;
 
 import java.io.File;
 import java.sql.Connection;

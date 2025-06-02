@@ -4,9 +4,9 @@
  * See LICENSE.md for details.
  */
 
-package me.clickism.clickauth.authentication;
+package de.clickism.clickauth.authentication;
 
-import me.clickism.clickauth.data.PasswordRepository;
+import de.clickism.clickauth.data.PasswordRepository;
 
 import java.util.UUID;
 

@@ -4,7 +4,7 @@
  * See LICENSE.md for details.
  */
 
-package me.clickism.clickauth.authentication;
+package de.clickism.clickauth.authentication;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 

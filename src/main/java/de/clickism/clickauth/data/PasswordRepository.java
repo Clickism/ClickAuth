@@ -4,9 +4,9 @@
  * See LICENSE.md for details.
  */
 
-package me.clickism.clickauth.data;
+package de.clickism.clickauth.data;
 
-import me.clickism.clickauth.ClickAuth;
+import de.clickism.clickauth.ClickAuth;
 import org.intellij.lang.annotations.Language;
 
 import java.sql.SQLException;
@@ -76,7 +76,7 @@ public class PasswordRepository {
         String sql = """
                 CREATE TABLE IF NOT EXISTS players (
                     uuid TEXT PRIMARY KEY,
-                    password_hash TEXT NOT NULL,
+                    password_hash TEXT,
                     last_ip TEXT
                 )
                 """;

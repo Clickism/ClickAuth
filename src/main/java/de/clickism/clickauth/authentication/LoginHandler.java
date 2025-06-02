@@ -4,106 +4,106 @@
  * See LICENSE.md for details.
  */
 
-package me.clickism.clickauth.listener;
+package de.clickism.clickauth.authentication;
 
-import me.clickism.clickauth.ClickAuth;
-import me.clickism.clickauth.authentication.AuthManager;
-import me.clickism.clickauth.authentication.PasswordManager;
+import de.clickism.clickauth.ClickAuth;
+import de.clickism.clickauth.listener.ChatInputListener;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.jetbrains.annotations.Nullable;
 
 import java.net.InetSocketAddress;
 import java.util.Optional;
-import java.util.UUID;
+import java.util.regex.Pattern;
 
-import static me.clickism.clickauth.ClickAuthConfig.*;
+import static de.clickism.clickauth.ClickAuthConfig.*;
+import static de.clickism.clickauth.message.Messages.*;
 
-public class JoinListener implements RegistrableListener {
+public class LoginHandler {
 
     private final PasswordManager passwordManager;
     private final AuthManager authManager;
     private final ChatInputListener chatInputListener;
 
-    public JoinListener(PasswordManager passwordManager,
-                        AuthManager authManager,
-                        ChatInputListener chatInputListener) {
+    private static final Pattern PASSWORD_PATTERN = Pattern.compile("[A-Za-z0-9#?!@$%^&*\\-]{8,}");
+
+    public LoginHandler(PasswordManager passwordManager, AuthManager authManager, ChatInputListener chatInputListener) {
         this.passwordManager = passwordManager;
         this.authManager = authManager;
         this.chatInputListener = chatInputListener;
     }
 
-    @EventHandler
-    private void onJoin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-        UUID playerUuid = player.getUniqueId();
+    public void handleLogin(Player player) {
         if (checkLastSession(player)) {
             authManager.authenticate(player);
-            sendScheduledMessage(player, "Welcome back.");
+            sendScheduledMessage(player, localize(WELCOME_BACK, player.getName()));
             return;
         }
-        if (passwordManager.hasPassword(playerUuid)) {
+        if (passwordManager.hasPassword(player.getUniqueId())) {
             askLogin(player);
             return;
         }
         askRegister(player);
     }
 
-    private void askLogin(Player player) {
+    public void askLogin(Player player) {
         sendScheduledMessage(player, "Enter password:");
         chatInputListener.addChatCallback(player,
                 password -> {
                     if (passwordManager.checkPassword(player.getUniqueId(), password)) {
                         // Log in player
                         authenticateAndSaveSession(player);
-                        player.sendMessage("Welcome back.");
+                        AUTH.send(player, localize(WELCOME_BACK, player.getName()));
                     } else {
-                        player.sendMessage("Incorrect password, please try again.");
+                        AUTH_FAIL.send(player, localize(INCORRECT_PASSWORD));
                         authManager.incrementFailedAttempts(player);
                         if (authManager.getFailedAttempts(player) >= CONFIG.get(MAX_LOGIN_ATTEMPTS)) {
-                            player.kickPlayer("Too many failed attempts.");
+                            player.kickPlayer(localize(TOO_MANY_ATTEMPTS));
                             return;
                         }
                         askLogin(player);
                     }
                 },
-                () -> player.kickPlayer("Login timed out."),
+                () -> player.kickPlayer(localize(LOGIN_TIMED_OUT)),
                 CONFIG.get(LOGIN_TIMEOUT));
     }
 
-    private void askRegister(Player player) {
-        player.sendMessage("Enter new password:");
+    public void askRegister(Player player) {
+        AUTH.send(player, localize(ENTER_NEW_PASSWORD));
         handlePasswordSetup(player, null);
     }
 
-    private void handlePasswordSetup(Player player, @Nullable String enteredPassword) {
+    public void handlePasswordSetup(Player player, @Nullable String enteredPassword) {
         chatInputListener.addChatCallback(player,
                 password -> {
                     if (enteredPassword == null) {
-                        player.sendMessage("Confirm password:");
+                        if (CONFIG.get(VALIDATE_PASSWORDS) && !isValidPassword(password)) {
+                            AUTH_FAIL.send(player, localize(INVALID_PASSWORD));
+                            askRegister(player);
+                            return;
+                        }
+                        AUTH.send(player, localize(CONFIRM_PASSWORD));
                         handlePasswordSetup(player, password);
                         return;
                     }
                     if (!enteredPassword.equals(password)) {
-                        player.sendMessage("Passwords do not match. Please try again.");
+                        AUTH_FAIL.send(player, localize(PASSWORD_MISMATCH));
                         askRegister(player);
                         return;
                     }
                     if (!passwordManager.setPassword(player.getUniqueId(), password)) {
-                        player.sendMessage("Failed to set password. Please try again.");
+                        AUTH_FAIL.send(player, localize(FAILED_TO_SET_PASSWORD));
                         askRegister(player);
                         return;
                     }
                     authenticateAndSaveSession(player);
-                    player.sendMessage("Password set. You can now log in.");
+                    AUTH.send(player, localize(PASSWORD_SET_SUCCESSFULLY));
                 },
-                () -> player.kickPlayer("Registration timed out."),
+                () -> player.kickPlayer(localize(REGISTRATION_TIMED_OUT)),
                 CONFIG.get(LOGIN_TIMEOUT));
     }
 
-    private void authenticateAndSaveSession(Player player) {
+    public void authenticateAndSaveSession(Player player) {
         authManager.authenticate(player);
         if (!CONFIG.get(REMEMBER_SESSIONS)) return;
         String ip = getIpAddress(player).orElse(null);
@@ -121,6 +121,10 @@ public class JoinListener implements RegistrableListener {
     private Optional<String> getIpAddress(Player player) {
         return Optional.ofNullable(player.getAddress())
                 .map(InetSocketAddress::getHostString);
+    }
+
+    private boolean isValidPassword(String password) {
+        return PASSWORD_PATTERN.matcher(password).matches();
     }
 
     private void sendScheduledMessage(Player player, String message) {
