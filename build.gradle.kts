@@ -39,9 +39,9 @@ tasks.build {
 }
 
 tasks.shadowJar {
-//    archiveClassifier.set("")
-//    isEnableRelocation = true
-//    relocationPrefix = "me.clickism.clickauth.shadow"
+    archiveClassifier.set("")
+    isEnableRelocation = true
+    relocationPrefix = "me.clickism.clickauth.shadow"
 }
 
 val targetJavaVersion = 17
