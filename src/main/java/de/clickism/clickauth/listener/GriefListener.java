@@ -31,7 +31,7 @@ public class GriefListener implements RegistrableListener {
     @EventHandler(ignoreCancelled = true)
     private void onMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
-        if (authManager.isAuthenticated(player)) return;
+        if (authManager.isAuthenticated(player.getUniqueId())) return;
         Location to = event.getTo();
         if (to == null) return;
         Location from = event.getFrom();
@@ -80,7 +80,7 @@ public class GriefListener implements RegistrableListener {
     }
 
     private void cancelIfNotAuthenticated(HumanEntity player, Cancellable event) {
-        if (authManager.isAuthenticated(player)) return;
+        if (authManager.isAuthenticated(player.getUniqueId())) return;
         event.setCancelled(true);
     }
 }

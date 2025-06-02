@@ -7,6 +7,8 @@
 package de.clickism.clickauth.authentication;
 
 import de.clickism.clickauth.data.PasswordRepository;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
@@ -29,8 +31,12 @@ public class PasswordManager {
                 .orElse(false);
     }
 
-    public boolean setLastSession(UUID uuid, String ip) {
+    public boolean setLastSession(UUID uuid, @NotNull String ip) {
         return passwordRepository.setLastIp(uuid, ipHasher.hash(ip));
+    }
+
+    public boolean invalidateSession(UUID uuid) {
+        return passwordRepository.setLastIp(uuid, null);
     }
 
     public boolean checkPassword(UUID uuid, String password) {
@@ -39,8 +45,12 @@ public class PasswordManager {
                 .orElse(false);
     }
 
-    public boolean setPassword(UUID uuid, String password) {
+    public boolean setPassword(UUID uuid, @NotNull String password) {
         return passwordRepository.setPasswordHash(uuid, passwordHasher.hash(password));
+    }
+
+    public boolean resetPassword(UUID uuid) {
+        return passwordRepository.setPasswordHash(uuid, null);
     }
 
     public boolean hasPassword(UUID uuid) {

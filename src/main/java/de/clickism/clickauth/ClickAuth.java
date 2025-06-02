@@ -7,6 +7,7 @@
 package de.clickism.clickauth;
 
 import de.clickism.clickauth.authentication.*;
+import de.clickism.clickauth.command.InvalidateSessionCommand;
 import de.clickism.clickauth.command.ResetPasswordCommand;
 import de.clickism.clickauth.data.Database;
 import de.clickism.clickauth.data.PasswordRepository;
@@ -64,7 +65,9 @@ public final class ClickAuth extends JavaPlugin {
         new CommandListener(authManager)
                 .registerListener(this);
         registerCommand(ResetPasswordCommand.LABEL, new ResetPasswordCommand(
-                passwordRepository, loginHandler, authManager));
+                passwordManager, loginHandler, authManager));
+        registerCommand(InvalidateSessionCommand.LABEL, new InvalidateSessionCommand(
+                passwordManager, loginHandler, authManager));
     }
 
     @Override

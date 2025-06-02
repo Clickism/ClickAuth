@@ -21,23 +21,22 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
 import static de.clickism.clickauth.message.Messages.*;
 
-public class ResetPasswordCommand implements TabExecutor {
-    public static final String LABEL = "reset_password";
-    private static final String PERMISSION_SELF = "clickauth.reset_password.self";
-    private static final String PERMISSION_OTHERS = "clickauth.reset_password.others";
-    public static final String USAGE = "Usage: /reset_password <player>";
+public class InvalidateSessionCommand implements TabExecutor {
+    public static final String LABEL = "invalidate_session";
+    private static final String PERMISSION_SELF = "clickauth.invalidate_session.self";
+    private static final String PERMISSION_OTHERS = "clickauth.invalidate_session.others";
+    private static final String USAGE = "Usage: /invalidate_session [player]";
 
     private final PasswordManager passwordManager;
     private final LoginHandler loginHandler;
     private final AuthManager authManager;
 
-    public ResetPasswordCommand(PasswordManager passwordManager,
-                                LoginHandler loginHandler,
-                                AuthManager authManager) {
+    public InvalidateSessionCommand(PasswordManager passwordManager,
+                                    LoginHandler loginHandler,
+                                    AuthManager authManager) {
         this.passwordManager = passwordManager;
         this.loginHandler = loginHandler;
         this.authManager = authManager;
@@ -48,47 +47,54 @@ public class ResetPasswordCommand implements TabExecutor {
                              @NotNull String label, @NotNull String[] args) {
         if (!label.equals(LABEL)) return false;
         switch (args.length) {
-            case 0 -> changeSelf(sender);
-            case 1 -> changeOther(args[0], sender);
+            case 0 -> invalidateSelf(sender);
+            case 1 -> invalidateOther(args[0], sender);
             default -> {
-                AUTH_FAIL.send(sender, USAGE);
+                sender.sendMessage(USAGE);
                 return false;
             }
         }
         return true;
     }
 
-    private void changeSelf(CommandSender sender) {
+    private void invalidateSelf(CommandSender sender) {
         if (!(sender instanceof Player player)) {
-            AUTH_FAIL.send(sender, USAGE);
+            sender.sendMessage(USAGE);
             return;
         }
-        UUID uuid = player.getUniqueId();
+        // TODO: Is it necessary now?
+//        if (!authManager.isAuthenticated(player)) {
+//            player.sendMessage(localize(MUST_BE_LOGGED_IN));
+//        }
         if (!player.hasPermission(PERMISSION_SELF)) {
             AUTH_FAIL.send(player, localize(NO_PERMISSION));
             return;
         }
-        passwordManager.resetPassword(uuid);
-        passwordManager.invalidateSession(uuid);
-        AUTH_WARN.send(player, localize(PASSWORD_CHANGED));
+        passwordManager.invalidateSession(player.getUniqueId());
+        authManager.deauthenticate(player.getUniqueId());
+        AUTH_WARN.send(player, localize(INVALIDATED_SESSION));
         loginHandler.handleLogin(player);
     }
 
-    private void changeOther(String playerName, CommandSender sender) {
+    private void invalidateOther(String playerName, CommandSender sender) {
+//        if (sender instanceof Player player && !authManager.isAuthenticated(player)) {
+//            player.sendMessage(localize(MUST_BE_LOGGED_IN));
+//            return;
+//        }
         if (!sender.hasPermission(PERMISSION_OTHERS)) {
             AUTH_FAIL.send(sender, localize(NO_PERMISSION));
             return;
         }
         @SuppressWarnings("deprecation")
         OfflinePlayer player = Bukkit.getOfflinePlayer(playerName);
-        passwordManager.resetPassword(player.getUniqueId());
         passwordManager.invalidateSession(player.getUniqueId());
+        authManager.deauthenticate(player.getUniqueId());
         Player onlinePlayer = player.getPlayer();
         if (onlinePlayer != null) {
-            AUTH_WARN.send(onlinePlayer, localize(PASSWORD_CHANGED));
+            AUTH_WARN.send(onlinePlayer, localize(INVALIDATED_SESSION));
             loginHandler.handleLogin(onlinePlayer);
         }
-        AUTH_SUCCESS.send(sender, localize(PASSWORD_CHANGED_OTHER, playerName));
+        AUTH_SUCCESS.send(sender, localize(INVALIDATED_SESSION_OTHER, playerName));
     }
 
     @Override

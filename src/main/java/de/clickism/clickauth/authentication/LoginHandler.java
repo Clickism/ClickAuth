@@ -14,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.net.InetSocketAddress;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 import static de.clickism.clickauth.ClickAuthConfig.*;
@@ -35,8 +36,8 @@ public class LoginHandler {
 
     public void handleLogin(Player player) {
         if (checkLastSession(player)) {
-            authManager.authenticate(player);
-            sendScheduledMessage(player, localize(WELCOME_BACK, player.getName()));
+            authManager.authenticate(player.getUniqueId());
+            AUTH_SUCCESS.send(player, localize(WELCOME_BACK, player.getName()));
             return;
         }
         if (passwordManager.hasPassword(player.getUniqueId())) {
@@ -46,18 +47,19 @@ public class LoginHandler {
         askRegister(player);
     }
 
-    public void askLogin(Player player) {
-        sendScheduledMessage(player, "Enter password:");
+    private void askLogin(Player player) {
+        AUTH.send(player, localize(ENTER_PASSWORD));
         chatInputListener.addChatCallback(player,
                 password -> {
-                    if (passwordManager.checkPassword(player.getUniqueId(), password)) {
+                    UUID uuid = player.getUniqueId();
+                    if (passwordManager.checkPassword(uuid, password)) {
                         // Log in player
                         authenticateAndSaveSession(player);
-                        AUTH.send(player, localize(WELCOME_BACK, player.getName()));
+                        AUTH_SUCCESS.send(player, localize(WELCOME_BACK, player.getName()));
                     } else {
                         AUTH_FAIL.send(player, localize(INCORRECT_PASSWORD));
-                        authManager.incrementFailedAttempts(player);
-                        if (authManager.getFailedAttempts(player) >= CONFIG.get(MAX_LOGIN_ATTEMPTS)) {
+                        authManager.incrementFailedAttempts(uuid);
+                        if (authManager.getFailedAttempts(uuid) >= CONFIG.get(MAX_LOGIN_ATTEMPTS)) {
                             player.kickPlayer(localize(TOO_MANY_ATTEMPTS));
                             return;
                         }
@@ -68,12 +70,12 @@ public class LoginHandler {
                 CONFIG.get(LOGIN_TIMEOUT));
     }
 
-    public void askRegister(Player player) {
+    private void askRegister(Player player) {
         AUTH.send(player, localize(ENTER_NEW_PASSWORD));
         handlePasswordSetup(player, null);
     }
 
-    public void handlePasswordSetup(Player player, @Nullable String enteredPassword) {
+    private void handlePasswordSetup(Player player, @Nullable String enteredPassword) {
         chatInputListener.addChatCallback(player,
                 password -> {
                     if (enteredPassword == null) {
@@ -97,14 +99,15 @@ public class LoginHandler {
                         return;
                     }
                     authenticateAndSaveSession(player);
-                    AUTH.send(player, localize(PASSWORD_SET_SUCCESSFULLY));
+                    AUTH_SUCCESS.send(player, localize(PASSWORD_SET_SUCCESSFULLY));
                 },
                 () -> player.kickPlayer(localize(REGISTRATION_TIMED_OUT)),
                 CONFIG.get(LOGIN_TIMEOUT));
     }
 
-    public void authenticateAndSaveSession(Player player) {
-        authManager.authenticate(player);
+    private void authenticateAndSaveSession(Player player) {
+        UUID uuid = player.getUniqueId();
+        authManager.authenticate(uuid);
         if (!CONFIG.get(REMEMBER_SESSIONS)) return;
         String ip = getIpAddress(player).orElse(null);
         if (ip == null) return;
@@ -125,13 +128,5 @@ public class LoginHandler {
 
     private boolean isValidPassword(String password) {
         return PASSWORD_PATTERN.matcher(password).matches();
-    }
-
-    private void sendScheduledMessage(Player player, String message) {
-        Bukkit.getScheduler().runTask(ClickAuth.INSTANCE, () -> {
-            if (player.isOnline()) {
-                player.sendMessage(message);
-            }
-        });
     }
 }

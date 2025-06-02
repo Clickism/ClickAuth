@@ -23,7 +23,7 @@ public class CommandListener implements RegistrableListener {
     @EventHandler
     private void onCommand(PlayerCommandPreprocessEvent event) {
         Player player = event.getPlayer();
-        if (!authManager.isAuthenticated(player)) {
+        if (!authManager.isAuthenticated(player.getUniqueId())) {
             event.setCancelled(true);
             player.sendMessage(localize(MUST_BE_LOGGED_IN));
         }

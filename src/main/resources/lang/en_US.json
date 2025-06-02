@@ -12,7 +12,9 @@
   "password_set_successfully": "Password set successfully. You are now logged in.",
   "registration_timed_out": "Registration timed out.",
   "no_permission": "You do not have permission to do this.",
-  "password_changed": "Your password has been changed successfully.",
-  "password_changed_other": "{player}'s password has been changed successfully.",
-  "must_be_logged_in": "You must be logged in to do that."
+  "password_changed": "Your password has been changed.",
+  "password_changed_other": "{player}'s password has been changed.",
+  "must_be_logged_in": "You must be logged in to do that.",
+  "invalidated_session": "Your session has been invalidated. Please log in again.",
+  "invalidated_session_other": "{player}'s session has been invalidated. They must log in again."
 }

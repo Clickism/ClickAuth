@@ -8,6 +8,7 @@ package de.clickism.clickauth.data;
 
 import de.clickism.clickauth.ClickAuth;
 import org.intellij.lang.annotations.Language;
+import org.jetbrains.annotations.Nullable;
 
 import java.sql.SQLException;
 import java.util.Optional;
@@ -65,7 +66,7 @@ public class PasswordRepository {
         }, uuid.toString());
     }
 
-    public boolean setLastIp(UUID uuid, String lastIp) {
+    public boolean setLastIp(UUID uuid, @Nullable String lastIp) {
         @Language("SQL")
         String sql = "UPDATE players SET last_ip = ? WHERE uuid = ?";
         return database.execute(sql, lastIp, uuid.toString());

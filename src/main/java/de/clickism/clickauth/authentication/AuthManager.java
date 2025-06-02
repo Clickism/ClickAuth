@@ -6,6 +6,7 @@
 
 package de.clickism.clickauth.authentication;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.HumanEntity;
 
 import java.util.*;
@@ -15,20 +16,25 @@ public class AuthManager {
     private final Set<UUID> authenticatedPlayers = new HashSet<>();
     private final Map<UUID, Integer> failedAttempts = new HashMap<>();
 
-    public boolean isAuthenticated(HumanEntity player) {
-        return authenticatedPlayers.contains(player.getUniqueId());
+    public boolean isAuthenticated(UUID uuid) {
+        return authenticatedPlayers.contains(uuid);
     }
 
-    public void authenticate(HumanEntity player) {
-        authenticatedPlayers.add(player.getUniqueId());
+    public void authenticate(UUID uuid) {
+        authenticatedPlayers.add(uuid);
+        failedAttempts.remove(uuid);
     }
 
-    public int getFailedAttempts(HumanEntity player) {
-        return failedAttempts.getOrDefault(player.getUniqueId(), 0);
+    public void deauthenticate(UUID uuid) {
+        authenticatedPlayers.remove(uuid);
     }
 
-    public void incrementFailedAttempts(HumanEntity player) {
-        int attempts = failedAttempts.getOrDefault(player.getUniqueId(), 0);
-        failedAttempts.put(player.getUniqueId(), attempts + 1);
+    public int getFailedAttempts(UUID uuid) {
+        return failedAttempts.getOrDefault(uuid, 0);
+    }
+
+    public void incrementFailedAttempts(UUID uuid) {
+        int attempts = failedAttempts.getOrDefault(uuid, 0);
+        failedAttempts.put(uuid, attempts + 1);
     }
 }

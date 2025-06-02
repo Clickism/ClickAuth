@@ -30,13 +30,28 @@ public enum Messages implements LocalizationKey {
     PASSWORD_CHANGED,
     @Parameters("player")
     PASSWORD_CHANGED_OTHER,
-    MUST_BE_LOGGED_IN;
+    MUST_BE_LOGGED_IN,
+    INVALIDATED_SESSION,
+    @Parameters("player")
+    INVALIDATED_SESSION_OTHER;
 
     public static final MessageType AUTH = MessageType.silent("&6[🔑] &e", "&8< &b%s &8>");
     public static final MessageType AUTH_FAIL = new MessageType("&6[🔑] &c", "&8< &b%s &8>") {
         @Override
         public void playSound(Player player) {
             MessageType.FAIL.playSound(player);
+        }
+    };
+    public static final MessageType AUTH_WARN = new MessageType("&6[🔑] &e", "&8< &b%s &8>") {
+        @Override
+        public void playSound(Player player) {
+            MessageType.WARN.playSound(player);
+        }
+    };
+    public static final MessageType AUTH_SUCCESS = new MessageType("&6[🔑] &a", "&8< &a%s &8>") {
+        @Override
+        public void playSound(Player player) {
+            MessageType.CONFIRM.playSound(player);
         }
     };
 

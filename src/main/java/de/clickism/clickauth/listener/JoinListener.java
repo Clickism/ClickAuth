@@ -6,7 +6,9 @@
 
 package de.clickism.clickauth.listener;
 
+import de.clickism.clickauth.ClickAuth;
 import de.clickism.clickauth.authentication.LoginHandler;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
 
@@ -20,6 +22,8 @@ public class JoinListener implements RegistrableListener {
 
     @EventHandler
     private void onJoin(PlayerJoinEvent event) {
-        loginHandler.handleLogin(event.getPlayer());
+        Bukkit.getScheduler().runTask(ClickAuth.INSTANCE, () -> {
+            loginHandler.handleLogin(event.getPlayer());
+        });
     }
 }
