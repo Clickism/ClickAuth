@@ -94,7 +94,7 @@ public class InvalidateSessionCommand implements TabExecutor {
             AUTH_WARN.send(onlinePlayer, localize(INVALIDATED_SESSION));
             loginHandler.handleLogin(onlinePlayer);
         }
-        AUTH_SUCCESS.send(sender, localize(INVALIDATED_SESSION_OTHER, playerName));
+        AUTH_CONFIRM.send(sender, localize(INVALIDATED_SESSION_OTHER, playerName));
     }
 
     @Override

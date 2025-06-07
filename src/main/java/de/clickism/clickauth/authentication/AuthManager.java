@@ -6,9 +6,6 @@
 
 package de.clickism.clickauth.authentication;
 
-import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.HumanEntity;
-
 import java.util.*;
 
 public class AuthManager {
@@ -36,5 +33,9 @@ public class AuthManager {
     public void incrementFailedAttempts(UUID uuid) {
         int attempts = failedAttempts.getOrDefault(uuid, 0);
         failedAttempts.put(uuid, attempts + 1);
+    }
+
+    public void resetFailedAttempts(UUID uuid) {
+        failedAttempts.remove(uuid);
     }
 }

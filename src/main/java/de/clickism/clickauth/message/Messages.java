@@ -51,7 +51,7 @@ public enum Messages implements LocalizationKey {
             MessageType.WARN.playSound(player);
         }
     };
-    public static final MessageType AUTH_SUCCESS = new MessageType("&6[🔑] &a", "&8< &a%s &8>") {
+    public static final MessageType AUTH_CONFIRM = new MessageType("&6[🔑] &a", "&8< &a%s &8>") {
         @Override
         public void playSound(Player player) {
             MessageType.CONFIRM.playSound(player);

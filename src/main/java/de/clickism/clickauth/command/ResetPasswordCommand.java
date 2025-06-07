@@ -83,7 +83,7 @@ public class ResetPasswordCommand implements TabExecutor {
         OfflinePlayer player = Bukkit.getOfflinePlayer(playerName);
         passwordManager.resetPassword(player.getUniqueId());
         passwordManager.invalidateSession(player.getUniqueId());
-        AUTH_SUCCESS.send(sender, localize(PASSWORD_CHANGED_OTHER, playerName));
+        AUTH_CONFIRM.send(sender, localize(PASSWORD_CHANGED_OTHER, playerName));
         Player onlinePlayer = player.getPlayer();
         if (onlinePlayer != null) {
             AUTH_WARN.send(onlinePlayer, localize(PASSWORD_CHANGED));

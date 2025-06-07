@@ -39,7 +39,7 @@ public class LoginHandler {
     public void handleLogin(Player player) {
         if (checkLastSession(player)) {
             authManager.authenticate(player.getUniqueId());
-            AUTH_PORTAL.send(player, localize(WELCOME_BACK, player.getName()));
+            AUTH_CONFIRM.send(player, localize(WELCOME_BACK, player.getName()));
             return;
         }
         if (passwordManager.hasPassword(player.getUniqueId())) {
@@ -62,7 +62,8 @@ public class LoginHandler {
                         AUTH_FAIL.send(player, localize(INCORRECT_PASSWORD));
                         authManager.incrementFailedAttempts(uuid);
                         if (authManager.getFailedAttempts(uuid) >= CONFIG.get(MAX_LOGIN_ATTEMPTS)) {
-                            player.kickPlayer(localize(TOO_MANY_ATTEMPTS));
+                            authManager.resetFailedAttempts(uuid);
+                            player.kickPlayer("§c" + localize(TOO_MANY_ATTEMPTS));
                             return;
                         }
                         askLogin(player);
@@ -101,7 +102,7 @@ public class LoginHandler {
                         return;
                     }
                     authenticateAndSaveSession(player);
-                    AUTH_SUCCESS.send(player, localize(PASSWORD_SET_SUCCESSFULLY));
+                    AUTH_CONFIRM.send(player, localize(PASSWORD_SET_SUCCESSFULLY));
                 },
                 () -> player.kickPlayer(localize(REGISTRATION_TIMED_OUT)),
                 CONFIG.get(LOGIN_TIMEOUT));
