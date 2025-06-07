@@ -1,5 +1,5 @@
-## ClickAuth 🔑
-ClickAuth is a work-in-progress offline authentication plugin for Minecraft that JUST works.
+# ClickAuth 🔑
+ClickAuth is an offline authentication plugin for Spigot/Paper that JUST works.
 
 ### Features
 - **Effortless.** Ready to use out of the box.
@@ -13,6 +13,12 @@ ClickAuth is a work-in-progress offline authentication plugin for Minecraft that
 ### Security & Privacy
 - Passwords are hashed and salted using the [bcrypt](https://en.wikipedia.org/wiki/Bcrypt) algorithm.
 - IP addresses are hashed using **SHA256**.
+
+### Commands
+- `/reset_password` - Resets your own or the given player's password.
+You will then be prompted to enter a new password.
+- `/invalidate_session` - Invalidates your own or the given player's session.
+This will require them to log in again.
 
 ### License
 - This project is licensed under the GPLv3 license.
