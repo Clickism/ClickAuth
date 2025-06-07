@@ -31,6 +31,8 @@ dependencies {
     implementation("de.clickism:configured-yaml:0.2.2")
     implementation("de.clickism:configured-json:0.2.2")
     implementation("de.clickism:configured-localization:0.2.2")
+    // Update Checker
+    implementation("de.clickism:modrinth-update-checker:1.0")
 }
 
 tasks.runServer {

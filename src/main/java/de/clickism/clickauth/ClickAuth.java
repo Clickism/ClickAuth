@@ -11,10 +11,8 @@ import de.clickism.clickauth.command.InvalidateSessionCommand;
 import de.clickism.clickauth.command.ResetPasswordCommand;
 import de.clickism.clickauth.data.Database;
 import de.clickism.clickauth.data.PasswordRepository;
-import de.clickism.clickauth.listener.ChatInputListener;
-import de.clickism.clickauth.listener.CommandListener;
-import de.clickism.clickauth.listener.GriefListener;
-import de.clickism.clickauth.listener.JoinListener;
+import de.clickism.clickauth.listener.*;
+import de.clickism.modrinthupdatechecker.ModrinthUpdateChecker;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -23,6 +21,7 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.util.logging.Logger;
 
+import static de.clickism.clickauth.ClickAuthConfig.CHECK_UPDATES;
 import static de.clickism.clickauth.ClickAuthConfig.CONFIG;
 
 public final class ClickAuth extends JavaPlugin {
@@ -31,6 +30,7 @@ public final class ClickAuth extends JavaPlugin {
     public static Logger LOGGER;
 
     private @Nullable Database database;
+    private @Nullable String newerVersion;
 
     @Override
     public void onLoad() {
@@ -68,6 +68,11 @@ public final class ClickAuth extends JavaPlugin {
                 passwordManager, loginHandler, authManager));
         registerCommand(InvalidateSessionCommand.LABEL, new InvalidateSessionCommand(
                 passwordManager, loginHandler, authManager));
+        if (CONFIG.get(CHECK_UPDATES)) {
+            checkForUpdates();
+            new UpdateWarningListener(() -> newerVersion)
+                    .registerListener(this);
+        }
     }
 
     @Override
@@ -85,5 +90,14 @@ public final class ClickAuth extends JavaPlugin {
         }
         command.setExecutor(executor);
         command.setTabCompleter(executor);
+    }
+
+    private void checkForUpdates() {
+        new ModrinthUpdateChecker("clickauth", "spigot")
+                .checkVersion(version -> {
+                    if (getDescription().getVersion().equalsIgnoreCase(version)) return;
+                    LOGGER.warning("A new version of ClickAuth is available: " + version);
+                    newerVersion = version;
+                });
     }
 }

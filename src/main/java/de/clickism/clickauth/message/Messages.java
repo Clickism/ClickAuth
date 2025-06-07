@@ -14,6 +14,8 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 public enum Messages implements LocalizationKey {
+    @Parameters("version")
+    UPDATE,
     ENTER_PASSWORD,
     @Parameters("player")
     WELCOME_BACK,

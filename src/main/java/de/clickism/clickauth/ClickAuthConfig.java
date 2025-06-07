@@ -36,6 +36,14 @@ public class ClickAuthConfig {
                             .language(lang)
                             .load());
 
+    public static final ConfigOption<Boolean> CHECK_UPDATES =
+            CONFIG.optionOf("check_updates", true)
+                    .description("""
+                            Whether to check for updates on server start.
+                            Recommended!
+                            """)
+                    .appendDefaultValue();
+
     public static final ConfigOption<Integer> MAX_LOGIN_ATTEMPTS =
             CONFIG.optionOf("max_login_attempts", 3)
                     .description("""
