@@ -9,6 +9,7 @@ ClickAuth is an offline authentication plugin for Spigot/Paper that *actually* w
   - Afterward, you'll be logged in **automatically**, unless your IP changes.
 - Highly configurable.
 - Players cannot execute any commands until they are logged in.
+- Language support for **English** and **German**.
 
 ### Security & Privacy
 - Passwords are hashed and salted using the [bcrypt](https://en.wikipedia.org/wiki/Bcrypt) algorithm.
@@ -22,6 +23,9 @@ You will then be prompted to enter a new password.
 This will require them to log in again.
   - Permissions: `clickauth.invalidate_session.self`, `clickauth.invalidate_session.others`
 This will require them to log in again.
+
+### Configuration
+- The configuration file is located at `plugins/ClickAuth/config.yml`.
 
 ### License
 - This project is licensed under the GPLv3 license.
