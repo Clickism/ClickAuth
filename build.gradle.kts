@@ -10,7 +10,6 @@ version = pluginVersion
 
 repositories {
     mavenCentral()
-    mavenLocal()
     maven {
         name = "spigotmc-repo"
         url = uri("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
@@ -21,16 +20,17 @@ repositories {
     }
 }
 
+val configuredVersion = "0.2.3"
+
 dependencies {
     compileOnly("org.spigotmc:spigot-api:1.20.1-R0.1-SNAPSHOT")
     compileOnly("org.jetbrains:annotations:26.0.2")
-    implementation("org.xerial:sqlite-jdbc:3.49.1.0")
     implementation("at.favre.lib:bcrypt:0.10.2")
     // Configuration & Localization
-    implementation("de.clickism:configured-core:0.2.2")
-    implementation("de.clickism:configured-yaml:0.2.2")
-    implementation("de.clickism:configured-json:0.2.2")
-    implementation("de.clickism:configured-localization:0.2.2")
+    implementation("de.clickism:configured-core:$configuredVersion")
+    implementation("de.clickism:configured-yaml:$configuredVersion")
+    implementation("de.clickism:configured-json:$configuredVersion")
+    implementation("de.clickism:configured-localization:$configuredVersion")
     // Update Checker
     implementation("de.clickism:modrinth-update-checker:1.0")
 }
@@ -52,6 +52,14 @@ tasks.shadowJar {
     mergeServiceFiles()
     isEnableRelocation = true
     relocationPrefix = "de.clickism.clickauth.shadow"
+    // Exclude Gson and Snakeyaml since it is already provided in Spigot
+    dependencies {
+        exclude(dependency("com.google.code.gson:gson"))
+        exclude(dependency("org.yaml:snakeyaml"))
+    }
+    // Stop Gson and Snakeyaml from being relocated
+    relocate("com.google.gson", "com.google.gson")
+    relocate("org.yaml.snakeyaml", "org.yaml.snakeyaml")
 }
 
 val targetJavaVersion = 17
