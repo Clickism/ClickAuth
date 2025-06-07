@@ -1,5 +1,5 @@
 # ClickAuth 🔑
-ClickAuth is an offline authentication plugin for Spigot/Paper that JUST works.
+ClickAuth is an offline authentication plugin for Spigot/Paper that *actually* works.
 
 ### Features
 - **Effortless.** Ready to use out of the box.
