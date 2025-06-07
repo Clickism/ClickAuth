@@ -25,7 +25,7 @@ public class CommandListener implements RegistrableListener {
         Player player = event.getPlayer();
         if (!authManager.isAuthenticated(player.getUniqueId())) {
             event.setCancelled(true);
-            player.sendMessage(localize(MUST_BE_LOGGED_IN));
+            AUTH_FAIL.send(player, localize(MUST_BE_LOGGED_IN));
         }
     }
 }
