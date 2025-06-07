@@ -21,7 +21,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 public class GriefListener implements RegistrableListener {
-    // TODO: Implement grief & movement prevention when not authenticated
     private final AuthManager authManager;
 
     public GriefListener(AuthManager authManager) {
@@ -61,7 +60,6 @@ public class GriefListener implements RegistrableListener {
 
     @EventHandler
     private void onDamage(EntityDamageEvent event) {
-        // TODO: Config setting to enable damage?
         if (!(event.getEntity() instanceof Player player)) return;
         cancelIfNotAuthenticated(player, event);
     }

@@ -62,10 +62,6 @@ public class InvalidateSessionCommand implements TabExecutor {
             sender.sendMessage(USAGE);
             return;
         }
-        // TODO: Is it necessary now?
-//        if (!authManager.isAuthenticated(player)) {
-//            player.sendMessage(localize(MUST_BE_LOGGED_IN));
-//        }
         if (!player.hasPermission(PERMISSION_SELF)) {
             AUTH_FAIL.send(player, localize(NO_PERMISSION));
             return;
