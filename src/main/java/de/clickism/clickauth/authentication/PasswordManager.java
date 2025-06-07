@@ -8,7 +8,6 @@ package de.clickism.clickauth.authentication;
 
 import de.clickism.clickauth.data.PasswordRepository;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 

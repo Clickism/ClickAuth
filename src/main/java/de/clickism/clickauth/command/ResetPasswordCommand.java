@@ -27,10 +27,9 @@ import static de.clickism.clickauth.message.Messages.*;
 
 public class ResetPasswordCommand implements TabExecutor {
     public static final String LABEL = "reset_password";
+    public static final String USAGE = "Usage: /reset_password <player>";
     private static final String PERMISSION_SELF = "clickauth.reset_password.self";
     private static final String PERMISSION_OTHERS = "clickauth.reset_password.others";
-    public static final String USAGE = "Usage: /reset_password <player>";
-
     private final PasswordManager passwordManager;
     private final LoginHandler loginHandler;
     private final AuthManager authManager;

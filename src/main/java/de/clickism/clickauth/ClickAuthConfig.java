@@ -12,7 +12,6 @@ import de.clickism.configured.Config;
 import de.clickism.configured.ConfigOption;
 
 import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 
 public class ClickAuthConfig {
     public static final Config CONFIG =
