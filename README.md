@@ -15,9 +15,12 @@ ClickAuth is an offline authentication plugin for Spigot/Paper that *actually* w
 - IP addresses are hashed using **SHA256**.
 
 ### Commands
-- `/reset_password` - Resets your own or the given player's password.
+- `/reset_password [player]` - Resets your own or the given player's password.
 You will then be prompted to enter a new password.
-- `/invalidate_session` - Invalidates your own or the given player's session.
+  - Permissions: `clickauth.reset_password.self`, `clickauth.reset_password.others`
+- `/invalidate_session [player]` - Invalidates your own or the given player's session. 
+This will require them to log in again.
+  - Permissions: `clickauth.invalidate_session.self`, `clickauth.invalidate_session.others`
 This will require them to log in again.
 
 ### License
