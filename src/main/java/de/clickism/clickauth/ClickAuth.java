@@ -13,6 +13,7 @@ import de.clickism.clickauth.data.Database;
 import de.clickism.clickauth.data.PasswordRepository;
 import de.clickism.clickauth.listener.*;
 import de.clickism.modrinthupdatechecker.ModrinthUpdateChecker;
+import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -73,6 +74,7 @@ public final class ClickAuth extends JavaPlugin {
             new UpdateWarningListener(() -> newerVersion)
                     .registerListener(this);
         }
+        Bukkit.getOnlinePlayers().forEach(loginHandler::handleLogin);
     }
 
     @Override
