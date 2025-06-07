@@ -70,6 +70,7 @@ public class ResetPasswordCommand implements TabExecutor {
         }
         passwordManager.resetPassword(uuid);
         passwordManager.invalidateSession(uuid);
+        authManager.deauthenticate(uuid);
         AUTH_WARN.send(player, localize(PASSWORD_CHANGED));
         loginHandler.handleLogin(player);
     }
@@ -81,8 +82,10 @@ public class ResetPasswordCommand implements TabExecutor {
         }
         @SuppressWarnings("deprecation")
         OfflinePlayer player = Bukkit.getOfflinePlayer(playerName);
-        passwordManager.resetPassword(player.getUniqueId());
-        passwordManager.invalidateSession(player.getUniqueId());
+        UUID uuid = player.getUniqueId();
+        passwordManager.resetPassword(uuid);
+        passwordManager.invalidateSession(uuid);
+        authManager.deauthenticate(uuid);
         AUTH_CONFIRM.send(sender, localize(PASSWORD_CHANGED_OTHER, playerName));
         Player onlinePlayer = player.getPlayer();
         if (onlinePlayer != null) {
