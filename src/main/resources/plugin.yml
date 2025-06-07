@@ -8,11 +8,9 @@ commands:
   reset_password:
     description: Reset your or another player's password
     usage: /reset_password [player]
-    permission: clickauth.reset_password.self
   invalidate_session:
     description: Invalidate your or another player's session
     usage: /invalidate_session [player]
-    permission: clickauth.invalidate_session.self
 permissions:
   clickauth.reset_password.self:
     description: Allows players to reset their own password
