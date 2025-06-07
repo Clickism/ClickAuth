@@ -39,7 +39,7 @@ public class LoginHandler {
     public void handleLogin(Player player) {
         if (checkLastSession(player)) {
             authManager.authenticate(player.getUniqueId());
-            AUTH_CONFIRM.send(player, localize(WELCOME_BACK, player.getName()));
+            AUTH_CONFIRM.sendSilently(player, localize(WELCOME_BACK, player.getName()));
             return;
         }
         if (passwordManager.hasPassword(player.getUniqueId())) {
@@ -51,6 +51,7 @@ public class LoginHandler {
 
     private void askLogin(Player player) {
         AUTH.send(player, localize(ENTER_PASSWORD));
+        AUTH_FAIL.sendTitle(player, "", localize(LOGIN_TITLE), 10, getTitleStayTime(), 10);
         chatInputListener.addChatCallback(player,
                 password -> {
                     UUID uuid = player.getUniqueId();
@@ -58,6 +59,8 @@ public class LoginHandler {
                         // Log in player
                         authenticateAndSaveSession(player);
                         AUTH_PORTAL.send(player, localize(WELCOME_BACK, player.getName()));
+                        AUTH_PORTAL.sendTitleSilently(player, "",
+                                localize(WELCOME_BACK_TITLE), 0, 60, 10);
                     } else {
                         AUTH_FAIL.send(player, localize(INCORRECT_PASSWORD));
                         authManager.incrementFailedAttempts(uuid);
@@ -69,12 +72,13 @@ public class LoginHandler {
                         askLogin(player);
                     }
                 },
-                () -> player.kickPlayer(localize(LOGIN_TIMED_OUT)),
+                () -> player.kickPlayer("§c" + localize(LOGIN_TIMED_OUT)),
                 CONFIG.get(LOGIN_TIMEOUT));
     }
 
     private void askRegister(Player player) {
         AUTH.send(player, localize(ENTER_NEW_PASSWORD));
+        AUTH_FAIL.sendTitle(player, "", localize(REGISTER_TITLE), 10, getTitleStayTime(), 10);
         handlePasswordSetup(player, null);
     }
 
@@ -87,7 +91,7 @@ public class LoginHandler {
                             askRegister(player);
                             return;
                         }
-                        AUTH.send(player, localize(CONFIRM_PASSWORD));
+                        AUTH_WARN.send(player, localize(CONFIRM_PASSWORD));
                         handlePasswordSetup(player, password);
                         return;
                     }
@@ -102,13 +106,15 @@ public class LoginHandler {
                         return;
                     }
                     authenticateAndSaveSession(player);
-                    AUTH_CONFIRM.send(player, localize(PASSWORD_SET_SUCCESSFULLY));
+                    AUTH_CONFIRM.sendSilently(player, localize(PASSWORD_SET_SUCCESSFULLY));
+                    AUTH_PORTAL.sendTitle(player, "", localize(WELCOME), 0, 60, 10);
                 },
                 () -> player.kickPlayer(localize(REGISTRATION_TIMED_OUT)),
                 CONFIG.get(LOGIN_TIMEOUT));
     }
 
     private void authenticateAndSaveSession(Player player) {
+        player.resetTitle();
         UUID uuid = player.getUniqueId();
         authManager.authenticate(uuid);
         if (!CONFIG.get(REMEMBER_SESSIONS)) return;
@@ -131,5 +137,10 @@ public class LoginHandler {
 
     private boolean isValidPassword(String password) {
         return passwordPattern.matcher(password).matches();
+    }
+
+    private int getTitleStayTime() {
+        int loginTimeout = CONFIG.get(LOGIN_TIMEOUT);
+        return loginTimeout > 0 ? loginTimeout : 300 * 20; // Default to 5 mins if timeout is not set
     }
 }

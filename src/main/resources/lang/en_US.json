@@ -1,7 +1,9 @@
 {
   "update": "§eClickAuth: §a§lNew version available: §f{version}",
   "enter_password": "Enter password:",
+  "welcome": "Welcome",
   "welcome_back": "Welcome back, {player}.",
+  "welcome_back_title": "Welcome back",
   "incorrect_password": "Incorrect password. Please try again.",
   "invalid_password": "Invalid password. Password must be at least 8 characters long and not contain spaces.",
   "too_many_attempts": "Too many failed attempts.",
@@ -13,9 +15,11 @@
   "password_set_successfully": "Password set successfully. You are now logged in.",
   "registration_timed_out": "Registration timed out.",
   "no_permission": "You do not have permission to do this.",
-  "password_changed": "Your password has been changed.",
-  "password_changed_other": "{player}'s password has been changed.",
+  "password_changed": "Your password has been reset.",
+  "password_changed_other": "{player}'s password has been reset.",
   "must_be_logged_in": "You must be logged in to do that.",
   "invalidated_session": "Your session has been invalidated. Please log in again.",
-  "invalidated_session_other": "{player}'s session has been invalidated. They must log in again."
+  "invalidated_session_other": "{player}'s session has been invalidated. They must log in again.",
+  "login_title": "Enter your password in chat",
+  "register_title": "Enter a password in chat"
 }

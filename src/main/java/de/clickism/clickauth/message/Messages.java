@@ -17,8 +17,10 @@ public enum Messages implements LocalizationKey {
     @Parameters("version")
     UPDATE,
     ENTER_PASSWORD,
+    WELCOME,
     @Parameters("player")
     WELCOME_BACK,
+    WELCOME_BACK_TITLE,
     INCORRECT_PASSWORD,
     INVALID_PASSWORD,
     TOO_MANY_ATTEMPTS,
@@ -36,16 +38,18 @@ public enum Messages implements LocalizationKey {
     MUST_BE_LOGGED_IN,
     INVALIDATED_SESSION,
     @Parameters("player")
-    INVALIDATED_SESSION_OTHER;
+    INVALIDATED_SESSION_OTHER,
+    LOGIN_TITLE,
+    REGISTER_TITLE;
 
-    public static final MessageType AUTH = MessageType.silent("&6[🔑] &e", "&8< &b%s &8>");
-    public static final MessageType AUTH_FAIL = new MessageType("&6[🔑] &c", "&8< &b%s &8>") {
+    public static final MessageType AUTH = MessageType.silent("&6[🔑] &e", "&8< &e%s &8>");
+    public static final MessageType AUTH_FAIL = new MessageType("&6[🔑] &c", "&8< &c%s &8>") {
         @Override
         public void playSound(Player player) {
             MessageType.FAIL.playSound(player);
         }
     };
-    public static final MessageType AUTH_WARN = new MessageType("&6[🔑] &e", "&8< &b%s &8>") {
+    public static final MessageType AUTH_WARN = new MessageType("&6[🔑] &e", "&8< &e%s &8>") {
         @Override
         public void playSound(Player player) {
             MessageType.WARN.playSound(player);
@@ -57,10 +61,10 @@ public enum Messages implements LocalizationKey {
             MessageType.CONFIRM.playSound(player);
         }
     };
-    public static final MessageType AUTH_PORTAL = new MessageType("&6[🔑] &a", "&8< &b%s &8>") {
+    public static final MessageType AUTH_PORTAL = new MessageType("&6[🔑] &a", "&8< &a%s &8>") {
         @Override
         public void playSound(Player player) {
-            player.playSound(player, Sound.BLOCK_PORTAL_TRAVEL, .2f, 1f);
+            player.playSound(player, Sound.BLOCK_PORTAL_TRAVEL, .1f, 1f);
         }
     };
 
