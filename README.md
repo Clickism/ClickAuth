@@ -8,6 +8,7 @@ ClickAuth is a work-in-progress offline authentication plugin for Minecraft that
 - You only have to log in once.
   - Afterward, you'll be logged in **automatically**, unless your IP changes.
 - Highly configurable.
+- Players cannot execute any commands until they are logged in.
 
 ### Security & Privacy
 - Passwords are hashed and salted using the [bcrypt](https://en.wikipedia.org/wiki/Bcrypt) algorithm.
