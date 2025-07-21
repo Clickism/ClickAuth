@@ -59,7 +59,7 @@ public final class ClickAuth extends JavaPlugin {
         ChatInputListener chatInputListener = new ChatInputListener(this)
                 .registerListener(this);
         LoginHandler loginHandler = new LoginHandler(passwordManager, authManager, chatInputListener);
-        new JoinListener(loginHandler)
+        new JoinListener(loginHandler, authManager)
                 .registerListener(this);
         new GriefListener(authManager)
                 .registerListener(this);
